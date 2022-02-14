@@ -7,16 +7,19 @@ import {Counter} from "./Counter";
 import {Settings} from "./Settings";
 
 function App() {
-return (
-    <>
-        <div>
-            <Settings/>
-        </div>
-        <div>
-            <Counter/>
-        </div>
 
-    </>
+    let [error, setError] = useState(2)
+
+    return (
+        <>
+            <div>
+                <Settings setError={setError}/>
+            </div>
+            <div>
+                <Counter valueError={error}/>
+            </div>
+
+        </>
 
     )
 
