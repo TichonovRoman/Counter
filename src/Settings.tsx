@@ -1,9 +1,12 @@
 import s from "./App.module.css";
-import Button from "./Button";
 import React, {ChangeEvent, useEffect, useState} from "react";
+import UniversalButton from "./Button";
+import {Carousel} from "react-bootstrap";
 
 type SettingsPropsType = {
     setError: (value: number) => void
+    setIntermediateMaxValue: (value: string | null) => void
+    setIntermediateStartValue: (value: string | null) => void
 }
 
 export const Settings = (props: SettingsPropsType) => {
@@ -14,66 +17,72 @@ export const Settings = (props: SettingsPropsType) => {
     let [startValueError, setStartValueError] = useState(false)
     let [maxValueError, setMaxValueError] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         let valueAsString = localStorage.getItem("startValue")
-        if(valueAsString) {
+        if (valueAsString) {
             let newValue = JSON.parse(valueAsString)
             setStartValue(newValue)
         }
 
 
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         let valueAsString = localStorage.getItem("maxValue")
-        if(valueAsString) {
+        if (valueAsString) {
             let newValue = JSON.parse(valueAsString)
             setMaxValue(newValue)
         }
 
 
-    },[])
-
-
+    }, [])
 
 
     const onChangeMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let changeMaxValue = e.currentTarget.value;
-        if (changeMaxValue === startValue || maxValue === startValue) {
+        if (changeMaxValue === startValue || changeMaxValue < startValue) {
             props.setError(0)
             setMaxValue(changeMaxValue)
+            setMaxValueError(true)
+            setDisabledButton(true)
             setStartValueError(true)
         } else {
             setMaxValue(changeMaxValue)
             props.setError(1)
             setStartValueError(false)
+            setMaxValueError(false)
+            setDisabledButton(false)
         }
     }
     const onChangeStartValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let startValue1 = e.currentTarget.value;
 
-        if (startValue1 < "0" || startValue1 === maxValue || startValue === maxValue) {
+        if (startValue1 < "0" || startValue1 === maxValue || startValue1 > maxValue) {
             props.setError(0)
             setStartValue(startValue1)
+            setDisabledButton(true)
             setMaxValueError(true)
         } else {
             props.setError(1)
             setStartValue(startValue1)
             setStartValueError(false)
             setMaxValueError(false)
+            setDisabledButton(false)
         }
     }
 
+    const [disabledButton, setDisabledButton] = useState(true)
 
     const callback = () => {
+
         props.setError(2)
         localStorage.setItem("maxValue", maxValue.toString())
         localStorage.setItem("startValue", startValue.toString())
+        props.setIntermediateMaxValue(maxValue.toString())
+        props.setIntermediateStartValue(startValue.toString())
+        setDisabledButton(true)
     }
 
-    const setDisabledButton = () => {
-        if (startValueError || maxValueError) return true
-    }
 
     return (
         <div className={s.settings}>
@@ -81,7 +90,7 @@ export const Settings = (props: SettingsPropsType) => {
                 <span>max value:</span> <input type={"number"}
                                                value={maxValue}
                                                onChange={onChangeMaxValueHandler}
-                                               className={maxValue === startValue || startValueError ? s.redNumber : ""}
+                                               className={startValue > maxValue || maxValue === startValue || startValueError ? s.redNumber : ""}
 
             />
             </div>
@@ -89,15 +98,14 @@ export const Settings = (props: SettingsPropsType) => {
                 <span>start value:</span> <input type={"number"}
                                                  value={startValue}
                                                  onChange={onChangeStartValueHandler}
-                                                 className={maxValue === startValue || maxValueError || startValueError ? s.redNumber : ""}
+                                                 className={startValue > maxValue || maxValue === startValue || maxValueError || startValueError ? s.redNumber : ""}
 
             />
 
             </div>
-
-            <Button name={'Set'}
-                    callback={callback}
-                    disabled={startValueError || maxValueError}/>
+            <UniversalButton name={'Set'}
+                             callback={callback}
+                             disabled={disabledButton || startValueError || maxValueError}/>
         </div>
 
     )

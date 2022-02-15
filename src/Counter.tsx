@@ -1,24 +1,32 @@
 import React, {useState} from "react";
 import s from "./App.module.css";
-import Button from "./Button";
+
+import UniversalButton from "./Button";
+import Button from "react-bootstrap/Button";
+import {ButtonGroup} from "react-bootstrap";
+
 
 type CounterPropsType = {
     valueError: number
+    intermediateStartValue: string | null
+    intermediateMaxValue: string | null
 
 }
 
 export let Counter = (props: CounterPropsType) => {
-    let startValue = localStorage.getItem("startValue")
-    let maxValue = localStorage.getItem("maxValue")
 
-    let [value, setValue] = useState(startValue)
+    let startValue = props.intermediateStartValue
+    let maxValue = props.intermediateMaxValue
+
+    let [value, setValue] = useState(localStorage.getItem("startValue"))
 
     const plusAddValue = () => {
-        if(value) {let valueAsString = JSON.parse(value) + 1
+        if (value) {
+            let valueAsString = JSON.parse(value) + 1
             value && setValue(valueAsString.toString())
         }
 
-        }
+    }
     const resetValue = () => setValue(startValue)
 
     const disabledInc = () => value === maxValue || props.valueError === 0 || props.valueError === 1
@@ -28,7 +36,8 @@ export let Counter = (props: CounterPropsType) => {
 
         if (props.valueError === 0) return <div>Incorrect value!</div>
         else if (props.valueError === 1) return <div>Enter values and press `set`</div>
-        else if (props.valueError === 2) return <div className={value === maxValue ? s.redNumber : s.outputBox}>{value}</div>
+        else if (props.valueError === 2) return <div
+            className={value === maxValue ? s.redNumber : s.outputBox}>{value}</div>
 
     }
 
@@ -38,8 +47,10 @@ export let Counter = (props: CounterPropsType) => {
             <div>
                 {message()}
             </div>
-            <Button name={'Inc'} callback={plusAddValue} disabled={disabledInc()}/>
-            <Button name={'Reset'} callback={resetValue} disabled={disabledReset()}/>
+            <ButtonGroup className="mb-2">
+            <UniversalButton name={'Inc'} callback={plusAddValue} disabled={disabledInc()}/>
+            <UniversalButton name={'Reset'} callback={resetValue} disabled={disabledReset()}/>
+            </ButtonGroup>
 
         </div>
     )
