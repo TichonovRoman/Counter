@@ -4,7 +4,8 @@ import './App.module.css';
 import s from './App.module.css'
 import {Counter} from "./Counter";
 import {Settings} from "./Settings";
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Form, Row, Stack} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 function App() {
 
@@ -15,33 +16,19 @@ function App() {
 
 
     return (
-        <Container>
-           <Row noGutters>
-               <Col>
-                   <Settings setError={setError}
-                             setIntermediateStartValue={setIntermediateStartValue}
-                             setIntermediateMaxValue = {setIntermediateMaxValue}
+        <>
+            <Stack gap={0} className="col-md-5 mx-auto">
+                <Settings setError={setError}
+                          setIntermediateStartValue={setIntermediateStartValue}
+                          setIntermediateMaxValue = {setIntermediateMaxValue}
+                />
+                <Counter valueError={error}
+                         intermediateStartValue = {intermediateStartValue}
+                         intermediateMaxValue = {intermediateMaxValue}
+                />
 
-
-
-                   />
-               </Col>
-
-
-            </Row>
-            <Row>
-                <Col>
-                    <Counter valueError={error}
-                             intermediateStartValue = {intermediateStartValue}
-                             intermediateMaxValue = {intermediateMaxValue}
-                    />
-                </Col>
-
-
-
-            </Row>
-
-        </Container>
+            </Stack>
+          </>
 
     )
 

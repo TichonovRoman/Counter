@@ -3,7 +3,7 @@ import s from "./App.module.css";
 
 import UniversalButton from "./Button";
 import Button from "react-bootstrap/Button";
-import {ButtonGroup} from "react-bootstrap";
+import {ButtonGroup, Form} from "react-bootstrap";
 
 
 type CounterPropsType = {
@@ -32,12 +32,22 @@ export let Counter = (props: CounterPropsType) => {
     const disabledInc = () => value === maxValue || props.valueError === 0 || props.valueError === 1
     const disabledReset = () => value === startValue || props.valueError === 0 || props.valueError === 1
 
+    const valueFulfill = () => {
+        if (typeof value === "string") {return value}
+    }
+
     const message = () => {
 
         if (props.valueError === 0) return <div>Incorrect value!</div>
         else if (props.valueError === 1) return <div>Enter values and press `set`</div>
-        else if (props.valueError === 2) return <div
-            className={value === maxValue ? s.redNumber : s.outputBox}>{value}</div>
+        else if (props.valueError === 2) return  <Form.Control
+            type="text"
+            placeholder="Disabled readonly input"
+            aria-label="Disabled input example"
+            isInvalid = {value === maxValue}
+            readOnly
+            value = {valueFulfill()}
+        />
 
     }
 

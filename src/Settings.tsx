@@ -1,7 +1,7 @@
 import s from "./App.module.css";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import UniversalButton from "./Button";
-import {Carousel} from "react-bootstrap";
+import {Carousel, Form} from "react-bootstrap";
 
 type SettingsPropsType = {
     setError: (value: number) => void
@@ -87,20 +87,29 @@ export const Settings = (props: SettingsPropsType) => {
     return (
         <div className={s.settings}>
             <div>
-                <span>max value:</span> <input type={"number"}
-                                               value={maxValue}
-                                               onChange={onChangeMaxValueHandler}
-                                               className={startValue > maxValue || maxValue === startValue || startValueError ? s.redNumber : ""}
+                <span>max value:</span>
+                <Form.Control
+                    type="number"
+                    placeholder="Disabled readonly input"
+                    aria-label="Disabled input example"
+                    value={maxValue}
+                    onChange={onChangeMaxValueHandler}
+                    isInvalid={startValue > maxValue || maxValue === startValue || startValueError}
+                />
 
-            />
+
             </div>
             <div>
-                <span>start value:</span> <input type={"number"}
-                                                 value={startValue}
-                                                 onChange={onChangeStartValueHandler}
-                                                 className={startValue > maxValue || maxValue === startValue || maxValueError || startValueError ? s.redNumber : ""}
+                <span>start value:</span>
+                <Form.Control
+                    type="number"
+                    placeholder="Disabled readonly input"
+                    aria-label="Disabled input example"
+                    value={startValue}
+                    onChange={onChangeStartValueHandler}
+                    isInvalid={startValue > maxValue || maxValue === startValue || maxValueError || startValueError}
 
-            />
+                />
 
             </div>
             <UniversalButton name={'Set'}
