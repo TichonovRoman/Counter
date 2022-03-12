@@ -45,11 +45,11 @@ export const Settings = (props: SettingsPropsType) => {
             setMaxValue(changeMaxValue)
             setMaxValueError(true)
             setDisabledButton(true)
-            setStartValueError(true)
+            // setStartValueError(true)
         } else {
             setMaxValue(changeMaxValue)
             props.setError(1)
-            setStartValueError(false)
+            // setStartValueError(false)
             setMaxValueError(false)
             setDisabledButton(false)
         }
